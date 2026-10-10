@@ -2,14 +2,27 @@
 import json
 import re
 import urllib.request
+from urllib.error import HTTPError
 from urllib.parse import urljoin
+
+def open_url(url):
+    request = urllib.request.Request(url, headers={
+        'User-Agent': 'AIZombie-Deployment-Check/1.0',
+        'Accept': 'text/html,application/json,application/xml,*/*',
+    })
+    try:
+        return urllib.request.urlopen(request, timeout=30)
+    except HTTPError as error:
+        print(f'{url}: HTTP {error.code}; headers={dict(error.headers)}', flush=True)
+        print(error.read(2000).decode('utf-8', errors='replace'), flush=True)
+        raise
 
 for base in (
     'https://aizombietrend.video',
     'https://aizombie01.duckweed1014.workers.dev',
 ):
     for path in ('/', '/pricing', '/ai-zombie-trend', '/zh', '/robots.txt', '/sitemap.xml'):
-        with urllib.request.urlopen(base + path, timeout=30) as response:
+        with open_url(base + path) as response:
             assert response.status == 200, (base, path, response.status)
             body = response.read().decode('utf-8')
             if path == '/':
@@ -18,13 +31,13 @@ for base in (
                 assets = re.findall(r'(?:src|href)="([^" ]+/assets/[^" ]+|/assets/[^" ]+)"', body)
                 assert assets, 'No built assets found'
                 for asset in assets[:2]:
-                    with urllib.request.urlopen(urljoin(base, asset), timeout=30) as asset_response:
+                    with open_url(urljoin(base, asset)) as asset_response:
                         assert asset_response.status == 200
             print(f'{base}{path}: 200')
-    with urllib.request.urlopen(base + '/api/ping', timeout=30) as response:
+    with open_url(base + '/api/ping') as response:
         assert json.load(response) == {'message': 'pong'}
-    with urllib.request.urlopen(base + '/api/auth/get-session', timeout=30) as response:
+    with open_url(base + '/api/auth/get-session') as response:
         assert json.load(response) is None
-    with urllib.request.urlopen(base + '/dashboard', timeout=30) as response:
+    with open_url(base + '/dashboard') as response:
         assert response.url == base + '/', response.url
     print(f'{base}: TLS, assets, health, anonymous session and private redirect passed')
