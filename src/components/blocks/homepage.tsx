@@ -28,10 +28,10 @@ import { readPreviewPhoto } from '@/aizombie/photos';
 import { creditPacks } from '@/aizombie/contracts';
 
 const FEATURE_PILLS = [
-  { icon: IconPhotoPlus, label: '2 photos' },
-  { icon: IconClock, label: '15 seconds' },
-  { icon: IconSparkles, label: 'With sound' },
-  { icon: IconSparkles, label: '16:9 or 9:16' },
+  { icon: IconPhotoPlus, label: 'Local photo preview' },
+  { icon: IconClock, label: 'Two-photo concept' },
+  { icon: IconSparkles, label: 'Planned 15-second story' },
+  { icon: IconSparkles, label: 'Output details under testing' },
 ] as const;
 
 const SHOTS = [
@@ -61,12 +61,12 @@ const STEPS = [
   {
     n: '1',
     title: 'Add two photos',
-    body: 'One of the person who holds the gun and one of the person, or pet, who turns. Faces go into every shot, so pick clear ones.',
+    body: 'Choose a clear photo for each role in the story. Use one consenting adult per image, with the face visible and evenly lit. Pet generation remains an unverified concept.',
   },
   {
     n: '2',
     title: 'Pick quality and format',
-    body: '480p costs 100 credits and 720p costs 200. Choose 16:9 to match the trend, or 9:16 to fill a phone screen.',
+    body: 'Explore the proposed landscape and portrait layouts. Resolution options and credit costs are provisional; selecting an option here does not reserve credits or submit a generation task.',
   },
   {
     n: '3',
@@ -95,6 +95,10 @@ const PRICING = creditPacks.map((pack) => ({
 }));
 
 const FAQ = [
+  {
+    q: 'What can I do on this page today?',
+    a: 'You can preview two photos locally, review the storyboard and explore the proposed format. The site does not currently generate videos, upload your images, accept payments or deduct credits.',
+  },
   {
     q: 'Can I generate a video now?',
     a: 'Not yet. This is a pre-launch preview. Photo previews work locally, but no photo is uploaded and no video is rendered.',
@@ -180,16 +184,16 @@ function ExampleCard({
                 className="size-7 fill-current"
                 aria-hidden="true"
               >
-                <path d="M8 5v14l11-7z" />
+                <path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v5h5V5H5zm9 0v5h5V5h-5zM5 14v5h5v-5H5zm9 0v5h5v-5h-5z" />
               </svg>
             </div>
             <span className="text-xs uppercase tracking-wider">
-              Demo placeholder
+              Storyboard concept
             </span>
           </div>
         </div>
         <div className="absolute bottom-2 right-2 rounded-md bg-background/70 px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground backdrop-blur">
-          480p · 16:9
+          Proposed format
         </div>
       </div>
       <div className="border-t border-border/60 px-4 py-3 text-sm">{label}</div>
@@ -500,12 +504,13 @@ export function HomePage() {
               Pre-launch preview
             </Badge>
             <h1 className="mt-6 text-balance text-3xl font-extrabold uppercase tracking-tight md:text-5xl lg:text-6xl">
-              AI Zombie Video Generator
+              AI Zombie Video Generator — Pre-launch Preview
             </h1>
             <p className="mx-auto mt-6 max-w-3xl text-balance text-base text-muted-foreground md:text-lg">
-              Two photos in. One of you has turned, the other cannot pull the
-              trigger, and the last thing you see is your best day together. The
-              viral zombie trend clip, made for you shot by shot.
+              Explore an AI zombie story starring two people: a tense cabin
+              encounter, a dramatic leap, and a reunion remembered. Preview your
+              photos locally and explore the proposed storyboard. Video
+              generation is not available yet.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-muted-foreground">
               {FEATURE_PILLS.map(({ icon: Icon, label }) => (
@@ -530,8 +535,8 @@ export function HomePage() {
         <Container className="px-6">
           <div className="mx-auto max-w-3xl">
             <SectionHeading
-              title="Make your AI zombie video"
-              description="Preview two photos and explore the planned format. Generation is not open yet."
+              title="Preview photos for your AI zombie story"
+              description="Choose two photos to preview the proposed cast. Images stay in this browser tab; this step does not upload files or create a video."
             />
             <div className="mt-10">
               <GeneratorForm />
@@ -540,13 +545,29 @@ export function HomePage() {
         </Container>
       </section>
 
+      <section id="about-ai-zombie" className="py-12 md:py-16">
+        <Container className="px-6">
+          <div className="mx-auto max-w-3xl">
+            <SectionHeading title="What is an AI zombie video?" align="left" />
+            <p className="mt-6 text-base text-muted-foreground">
+              An AI zombie video uses artificial intelligence to create or
+              transform scenes involving zombie characters. This project
+              explores a two-photo story: one person becomes a zombie, while the
+              other recognizes them before the scene shifts into a shared
+              memory. Here, the zombie trend is a creative reference for the
+              storyboard, rather than a promise of a finished clip.
+            </p>
+          </div>
+        </Container>
+      </section>
+
       {/* 4. Shot list */}
       <section id="shots" className="bg-muted/30 py-12 md:py-20">
         <Container className="px-6">
           <SectionHeading
-            eyebrow="What happens in your AI zombie video"
-            title="Every clip follows the shot list of the trend"
-            description="So yours cuts the same way as the ones in your feed."
+            eyebrow="Proposed story sequence"
+            title="Explore the zombie trend storyboard"
+            description="Our proposed story moves from a cabin confrontation to a close-up, a leap, and a warm reunion. The timings below are a creative plan, not a guarantee of generated results."
           />
           <ol className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
             {SHOTS.map((s, i) => (
@@ -570,19 +591,22 @@ export function HomePage() {
       <section id="examples" className="py-12 md:py-20">
         <Container className="px-6">
           <SectionHeading
-            title="AI zombie video examples"
-            description="Both clips came out of this generator as you see them, sound included. Press play."
+            title="AI zombie storyboard concepts"
+            description="These cards illustrate the proposed couple and pet concepts. They are placeholders, not generated videos. Real samples will be added after testing."
           />
           <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
-            <ExampleCard label="Couple version, 16:9, 480p" tone="normal" />
-            <ExampleCard label="Pet version, 16:9, 480p" tone="infected" />
+            <ExampleCard label="Couple storyboard concept" tone="normal" />
+            <ExampleCard
+              label="Pet storyboard concept — unverified"
+              tone="infected"
+            />
           </div>
           <div className="mt-6 text-center text-sm">
             <Link
               to="/ai-zombie-video-examples"
               className="text-primary underline-offset-4 hover:underline"
             >
-              See all examples →
+              Explore the storyboard concepts →
             </Link>
           </div>
         </Container>
@@ -592,8 +616,8 @@ export function HomePage() {
       <section id="how-to" className="bg-muted/30 py-12 md:py-20">
         <Container className="px-6">
           <SectionHeading
-            title="How to make an AI zombie video"
-            description="There is no prompt to write and nothing to edit. The shot list is built in."
+            title="Prepare photos for an AI zombie video"
+            description="Use the preview to choose your cast and review the planned format. Actual output quality and supported options will be confirmed through provider testing."
           />
           <ol className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-3">
             {STEPS.map((s) => (
@@ -620,12 +644,25 @@ export function HomePage() {
               ))}
             </ul>
           </div>
+          <div className="mx-auto mt-8 max-w-4xl">
+            <h3 className="text-base font-semibold">
+              How to choose photos for the preview
+            </h3>
+            <p className="mt-4 text-sm text-muted-foreground">
+              Use one person per image and keep the face unobstructed. A sharp,
+              evenly lit photo makes it easier to inspect the proposed cast.
+              Avoid group photos, strong beauty filters, masks and sunglasses.
+              The preview accepts JPG, PNG and WebP files under 8 MB, with both
+              dimensions at least 300 pixels. These checks confirm that an image
+              can be previewed; they do not guarantee future video quality.
+            </p>
+          </div>
           <div className="mt-6 text-center text-sm">
             <Link
               to="/zombie-love-story"
               className="text-primary underline-offset-4 hover:underline"
             >
-              Make a Zombie Love Story →
+              Explore the zombie love story concept →
             </Link>
             <span className="mx-2 text-muted-foreground">·</span>
             <span className="text-muted-foreground">
@@ -642,7 +679,7 @@ export function HomePage() {
           <SectionHeading
             eyebrow="Proposed pricing"
             title="Credit packs planned for launch"
-            description="A 480p video costs 100 credits and a 720p video costs 200."
+            description="These are proposed one-time credit packs. Checkout is closed, and final generation costs, expiry and refund terms will be confirmed before sales begin."
           />
           <div className="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-3">
             {PRICING.map((p) => (
@@ -655,7 +692,7 @@ export function HomePage() {
               >
                 {p.popular ? (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                    Most popular
+                    Proposed Starter pack
                   </div>
                 ) : null}
                 <CardContent className="space-y-4 p-6">

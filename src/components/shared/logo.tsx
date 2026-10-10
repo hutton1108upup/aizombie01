@@ -1,7 +1,13 @@
 import { websiteConfig } from '@/config/website';
 import { cn } from '@/lib/utils';
 
-export function Logo({ className }: { className?: string }) {
+export function Logo({
+  className,
+  loading,
+}: {
+  className?: string;
+  loading?: 'eager' | 'lazy';
+}) {
   const name = websiteConfig.metadata?.name ?? 'App';
   const logoLight = websiteConfig.metadata?.images?.logoLight ?? '/logo.png';
   const logoDark = websiteConfig.metadata?.images?.logoDark ?? logoLight;
@@ -15,6 +21,7 @@ export function Logo({ className }: { className?: string }) {
         width={32}
         height={32}
         decoding="async"
+        loading={loading}
       />
       <img
         src={logoDark}
@@ -23,6 +30,7 @@ export function Logo({ className }: { className?: string }) {
         width={32}
         height={32}
         decoding="async"
+        loading={loading}
       />
     </>
   );

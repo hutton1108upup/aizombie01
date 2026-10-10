@@ -53,9 +53,9 @@ export const websiteConfig: WebsiteConfig = {
   },
   metadata: {
     name: 'AI Zombie Video',
-    title: 'AI Zombie Video Generator — Pre-launch Preview',
+    title: 'AI Zombie Video Generator | Pre-launch Photo Preview',
     description:
-      'Explore a planned AI zombie video story from two photos. Local photo previews are available; generation and checkout are not open yet.',
+      'Explore an AI zombie story from two photos. Preview photos locally and learn about the zombie trend format. Video generation and checkout are not open yet.',
     images: {
       ogImage: '/og.png',
       logoLight: '/logo.png',

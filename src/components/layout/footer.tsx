@@ -29,7 +29,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
         <div className="grid grid-cols-2 gap-8 py-16 md:grid-cols-6">
           <div className="col-span-full flex flex-col items-start md:col-span-2">
             <div className="flex items-center space-x-2">
-              <Logo />
+              <Logo loading="lazy" />
               <span className="text-xl font-semibold">
                 {websiteConfig.metadata?.name}
               </span>

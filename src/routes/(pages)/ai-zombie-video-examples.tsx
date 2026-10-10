@@ -7,12 +7,36 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
 const EXAMPLES = [
-  { id: 'couple-1', label: 'Couple, 16:9, 480p', tone: 'normal' as const },
-  { id: 'couple-2', label: 'Couple, 9:16, 480p', tone: 'normal' as const },
-  { id: 'pet-1', label: 'Pet, 16:9, 480p', tone: 'infected' as const },
-  { id: 'pet-2', label: 'Pet, 9:16, 480p', tone: 'infected' as const },
-  { id: 'couple-3', label: 'Couple HD, 16:9, 720p', tone: 'normal' as const },
-  { id: 'pet-3', label: 'Pet HD, 9:16, 720p', tone: 'infected' as const },
+  {
+    id: 'couple-1',
+    label: 'Couple concept — landscape',
+    tone: 'normal' as const,
+  },
+  {
+    id: 'couple-2',
+    label: 'Couple concept — portrait',
+    tone: 'normal' as const,
+  },
+  {
+    id: 'pet-1',
+    label: 'Pet concept — landscape, unverified',
+    tone: 'infected' as const,
+  },
+  {
+    id: 'pet-2',
+    label: 'Pet concept — portrait, unverified',
+    tone: 'infected' as const,
+  },
+  {
+    id: 'couple-3',
+    label: 'Couple concept — proposed HD',
+    tone: 'normal' as const,
+  },
+  {
+    id: 'pet-3',
+    label: 'Pet concept — proposed HD, unverified',
+    tone: 'infected' as const,
+  },
 ];
 
 export const Route = createFileRoute('/(pages)/ai-zombie-video-examples')({
@@ -20,9 +44,9 @@ export const Route = createFileRoute('/(pages)/ai-zombie-video-examples')({
     seo('/ai-zombie-video-examples', {
       canonicalLocale: 'en',
       alternateLocales: ['en'],
-      title: 'AI zombie video examples — AI Zombie Video',
+      title: 'AI Zombie Storyboard Concepts — Pre-launch Preview',
       description:
-        'See AI zombie video examples: couples, pets, HD, 16:9 and 9:16. Concept cards only. Real generated samples are not available yet.',
+        'Explore AI zombie storyboard concepts for couples and pets. These are concept cards, not playable videos. Real generated samples are not available yet.',
     }),
   component: ExamplesRoute,
 });
@@ -35,10 +59,10 @@ function ExamplesRoute() {
           variant="outline"
           className="rounded-full border-primary/40 px-3 py-1 text-xs uppercase tracking-wider text-primary"
         >
-          Examples
+          Storyboard concepts
         </Badge>
         <h1 className="mt-6 text-balance text-3xl font-extrabold uppercase tracking-tight md:text-5xl">
-          AI zombie video examples
+          AI zombie storyboard concepts
         </h1>
         <p className="mx-auto mt-6 text-balance text-base text-muted-foreground md:text-lg">
           These are concept cards, not playable samples or generated results.
@@ -67,12 +91,12 @@ function ExamplesRoute() {
                     className="size-7 fill-current"
                     aria-hidden="true"
                   >
-                    <path d="M8 5v14l11-7z" />
+                    <path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v5h5V5H5zm9 0v5h5V5h-5zM5 14v5h5v-5H5zm9 0v5h5v-5h-5z" />
                   </svg>
                 </div>
               </div>
               <div className="absolute bottom-2 right-2 rounded-md bg-background/70 px-2 py-1 text-[10px] uppercase tracking-wider text-muted-foreground backdrop-blur">
-                Demo placeholder
+                Storyboard concept
               </div>
             </div>
             <CardContent className="p-4 text-sm">{e.label}</CardContent>
@@ -86,7 +110,7 @@ function ExamplesRoute() {
           hash="generator"
           className="text-primary underline-offset-4 hover:underline"
         >
-          Make one now →
+          Preview your photos →
         </Link>
       </div>
     </Container>
