@@ -2,13 +2,15 @@
 
 The local project currently provides private browser photo previews and an authenticated video/accounting foundation. Real video generation, private photo uploads and credit-pack checkout are not connected. Generation and purchase controls remain closed.
 
+Public preview: https://aizombietrend.video. Authentication, uploads, generation and checkout remain closed in this deployment.
+
 ## Local checks
 
 ```powershell
 Set-Location '.\aizombie01'
+pnpm.cmd build
 pnpm.cmd check
 pnpm.cmd typecheck
-pnpm.cmd build
 pnpm.cmd e2e
 pnpm.cmd e2e:production
 ```
