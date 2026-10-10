@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "aizombie01",
+  "account_id": "7fd7ed1128ca3d125feaa279f4d4c547",
   "main": "./src/server.ts",
   "compatibility_date": "2025-09-02",
   "compatibility_flags": [
