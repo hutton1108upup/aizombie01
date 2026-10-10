@@ -5,8 +5,8 @@ import urllib.request
 from urllib.parse import urljoin
 
 for base in (
-    'https://aizombie01.duckweed1014.workers.dev',
     'https://aizombietrend.video',
+    'https://aizombie01.duckweed1014.workers.dev',
 ):
     for path in ('/', '/pricing', '/ai-zombie-trend', '/zh', '/robots.txt', '/sitemap.xml'):
         with urllib.request.urlopen(base + path, timeout=30) as response:
