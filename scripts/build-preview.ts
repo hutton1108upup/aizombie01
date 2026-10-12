@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import analytics from '../analytics.config.json';
 
 // Each preview build gets an isolated directory; older artifacts stay local.
 const output = `outputs/preview-builds/${Date.now()}`;
@@ -16,8 +17,10 @@ const variables = {
   VITE_GOOGLE_LOGIN_ENABLED: 'false',
   VITE_MAIL_FROM: '',
   VITE_SUPPORT_EMAIL: '',
-  VITE_GOOGLE_ANALYTICS_ID: '',
-  VITE_CLARITY_PROJECT_ID: '',
+  VITE_GOOGLE_ANALYTICS_ID:
+    process.env.VITE_GOOGLE_ANALYTICS_ID ?? analytics.googleMeasurementId,
+  VITE_CLARITY_PROJECT_ID:
+    process.env.VITE_CLARITY_PROJECT_ID ?? analytics.clarityProjectId,
   VITE_PLAUSIBLE_SCRIPT: '',
   VITE_UMAMI_WEBSITE_ID: '',
   VITE_UMAMI_SCRIPT: '',

@@ -388,3 +388,7 @@ Paid generation, purchase, signed delivery and retention/cleanup verification re
 ## Public Cloudflare preview
 
 The production preview blocks all account, upload, generation, checkout and webhook routes before they can access a binding. Private pages redirect home, and session lookup returns no user. Marketing, static assets and health remain readable. The public preview requires no D1, R2, KV or provider credentials. Local MODE=e2e retains the authenticated foundation journeys; paid live release remains independently blocked.
+
+## Production analytics integration
+
+Browser check: `scripts/check-analytics-browser.mjs`, against an isolated built preview Worker. Vendor requests are stubbed, so verification never sends fake traffic to analytics providers. Local host loads no analytics; a simulated production origin loads only the configured IDs; URL query/hash and detailed referrer paths are omitted; Clarity skips initial query URLs; both photo inputs are inside its masked form. An initial page and one internal route produce exactly two GA4 page_view events and only one configuration. Live provider receipt and GSC ownership/sitemap state require separate dashboard evidence.

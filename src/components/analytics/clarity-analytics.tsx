@@ -1,5 +1,6 @@
 import { ClientScript } from '@/components/shared/client-script';
 import { clientEnv } from '@/env/client';
+import { analyticsPageUrl } from '@/lib/site-analytics';
 
 /**
  * Microsoft Clarity
@@ -8,7 +9,14 @@ import { clientEnv } from '@/env/client';
 export function ClarityAnalytics() {
   if (!import.meta.env.PROD) return null;
   const projectId = clientEnv.VITE_CLARITY_PROJECT_ID;
-  if (!projectId) return null;
+  if (
+    !projectId ||
+    !/^[a-z0-9]+$/.test(projectId) ||
+    typeof window === 'undefined' ||
+    !analyticsPageUrl(window.location.href) ||
+    window.location.search
+  )
+    return null;
 
   const inlineHtml = `(function(c,l,a,r,i,t,y){
     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
