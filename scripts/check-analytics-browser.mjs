@@ -45,6 +45,13 @@ let events = await page.evaluate(() =>
   window.dataLayer.filter((e) => e[0] === 'event' && e[1] === 'page_view')
 );
 assert.equal(events.length, 1);
+assert.ok(
+  await page.evaluate(() =>
+    window.dataLayer.every(
+      (entry) => Object.prototype.toString.call(entry) === '[object Arguments]'
+    )
+  )
+);
 assert.equal(events[0][2].page_location, 'https://aizombietrend.video/');
 assert.equal(vendors.filter((u) => u.includes('clarity')).length, 0);
 await page.goto('https://aizombietrend.video/', { waitUntil: 'networkidle' });

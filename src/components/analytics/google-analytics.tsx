@@ -5,7 +5,7 @@ import { clientEnv } from '@/env/client';
 import { analyticsPageUrl, analyticsReferrer } from '@/lib/site-analytics';
 
 type AnalyticsWindow = Window & {
-  dataLayer?: unknown[][];
+  dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
   aizombieGaId?: string;
 };
@@ -24,8 +24,9 @@ export function GoogleAnalytics() {
     if (!pageUrl) return;
     const target = window as AnalyticsWindow;
     target.dataLayer ??= [];
-    target.gtag ??= (...args: unknown[]) => {
-      target.dataLayer?.push(args);
+    target.gtag ??= function () {
+      // biome-ignore lint/complexity/noArguments: Google's command dispatcher requires an Arguments object.
+      target.dataLayer?.push(arguments);
     };
     if (target.aizombieGaId !== id) {
       target.gtag('js', new Date());
@@ -38,15 +39,15 @@ export function GoogleAnalytics() {
       });
       target.aizombieGaId = id;
     }
-    const frame = window.requestAnimationFrame(() => {
+    const timer = window.setTimeout(() => {
       target.gtag?.('event', 'page_view', {
         send_to: id,
         page_location: pageUrl,
         page_title: document.title,
         page_referrer: analyticsReferrer(document.referrer),
       });
-    });
-    return () => window.cancelAnimationFrame(frame);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [id, validId, pathname]);
 
   if (
