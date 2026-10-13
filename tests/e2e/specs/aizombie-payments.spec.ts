@@ -1,6 +1,36 @@
 import { expect, test } from '@playwright/test';
 import { registerE2EUser, loginByForm } from '../fixtures/auth';
 
+test('successful Test checkout opens the current Waffo store checkout URL', async ({
+  page,
+  request,
+}) => {
+  const user = await registerE2EUser(request);
+  await loginByForm(page, user);
+  const destination =
+    'https://pancake.waffo.ai/store/ai-zombie-video/checkout/cs_test#token=fake';
+  await page.route('**/api/aizombie/payments', async (route) => {
+    await route.fulfill({
+      json:
+        route.request().method() === 'GET'
+          ? { mode: 'test', credits: 0, orders: [] }
+          : { mode: 'test', url: destination },
+    });
+  });
+  await page.route(
+    'https://pancake.waffo.ai/store/ai-zombie-video/checkout/cs_test',
+    async (route) => {
+      await route.fulfill({
+        contentType: 'text/html',
+        body: '<html><body>Test checkout</body></html>',
+      });
+    }
+  );
+  await page.goto('/dashboard/payments');
+  await page.getByTestId('test-buy-single').click();
+  await expect(page).toHaveURL(destination);
+});
+
 test('credit payment APIs require authentication and same-origin requests', async ({
   request,
   baseURL,

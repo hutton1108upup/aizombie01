@@ -43,6 +43,17 @@ Publish action, which copies a Test product to Production.
 
 ## Local setup after a project-owned key exists
 
+On 2026-10-13, the dedicated **AI Zombie Test 2026-10-13** key was created with
+platform key retention disabled. Its RSA private key is stored only in ignored
+local files. The local `.dev.vars` keeps `AIZOMBIE_WAFFO_TEST_ENABLED=false` by
+default. No key was uploaded to Cloudflare or committed to GitHub.
+
+All three real SDK Test checkout calls succeeded and repeated requests reused
+the saved session. The Single hosted page visibly showed Test mode, AI Zombie
+Video and USD 6.90. No purchase was completed. The actual vendor URL format is
+`https://pancake.waffo.ai/store/{slug}/checkout/cs_*`; client and server now share
+one check restricting HTTPS, exact host, normal port and checkout path.
+
 1. In Waffo **API 与开发**, select **测试模式**. Create a new key for AI Zombie,
    retaining its private key locally. Do not reuse a sibling site's key and do
    not paste the private key into chat.
@@ -56,13 +67,37 @@ Publish action, which copies a Test product to Production.
    in local dev MODE=e2e and must never be exposed through a public tunnel.
 4. Use a local verified test account and open `/dashboard/payments`. The three
    buttons must produce a Test checkout; returning alone leaves the order pending.
-5. A publicly reachable **dedicated Test deployment** with D1 and real auth must
+5. A publicly reachable **dedicated Test receiver** with isolated D1 must
    be confirmed and configured before registering an actual Waffo receiver.
    Do not register `aizombietrend.video` as a working callback yet: its public
    preview deliberately returns 503 for all payment requests.
 6. Complete a real Waffo Test purchase, prove its signed callback changes one
    order to paid, replay it, and test a refund. Provider-delivered end-to-end
-   verification remains pending the private key and Test deployment.
+   verification remains pending the Test receiver deployment.
+
+## Prepared receiver deployment, awaiting account/resource confirmation
+
+- Confirmed target account: Cloudflare `Duckweed1014@gmail.com's Account`,
+  ID `7fd7ed1128ca3d125feaa279f4d4c547`.
+- Proposed new Worker: `aizombie-waffo-test`.
+- Proposed new D1 database: `aizombie-waffo-test`.
+- Config: `wrangler.waffo-test.jsonc`; the database ID is deliberately a
+  placeholder until the named Test database is created and verified.
+- Callback: `https://aizombie-waffo-test.duckweed1014.workers.dev/api/aizombie/payments/webhook`.
+  This proposed URL is not deployed or registered yet.
+- Entry: `src/aizombie/waffo-test-receiver.ts`, already bundled by a local
+  Wrangler dry run. Only `/health` and the signed Test callback are exposed.
+  No login, e2e helper, checkout creation or public balance/history endpoints.
+- This receiver requires **no merchant private key or app login secret**.
+  It uses the vendor SDK's public Test signature key. Store/product IDs are
+  pinned to this project. Non-Test or unmatched events cannot credit an order.
+- Ignored `outputs/private/waffo-test-receiver-seed.sql` prepares a minimal
+  synthetic user table and the three server-created pending Test orders.
+  It contains no session URL, private key or real customer contact data.
+- Deployment does not alter the `aizombie01` Worker or root domain. After
+  confirmation, create the resources, replace the placeholder, initialize only
+  this Test database, deploy, register this store's Test webhook, and prove a
+  Test completion and refund in D1. Do not expose the local e2e harness.
 
 ## Verification and launch boundaries
 

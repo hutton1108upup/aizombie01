@@ -1,6 +1,22 @@
 import { z } from 'zod';
 import { creditPacks } from '@/aizombie/contracts';
 
+export function safeWaffoCheckoutUrl(value: string) {
+  const url = new URL(value);
+  const checkoutPath = /^\/store\/[a-z0-9-]+\/checkout\/cs_[a-zA-Z0-9-]+\/?$/;
+  if (
+    url.protocol !== 'https:' ||
+    url.hostname !== 'pancake.waffo.ai' ||
+    url.port ||
+    url.username ||
+    url.password ||
+    !checkoutPath.test(url.pathname)
+  ) {
+    throw new Error('Unexpected Waffo checkout destination.');
+  }
+  return value;
+}
+
 export const creditCheckoutSchema = z
   .object({
     packId: z.enum(['single', 'starter', 'creator']),
@@ -15,6 +31,11 @@ export type TestPaymentConfig = {
   storeId: string;
   products: Record<CreditPackId, string>;
 };
+
+export type TestCreditEventConfig = Pick<
+  TestPaymentConfig,
+  'storeId' | 'products'
+>;
 
 // Explicit Test-only switch. Never fall back to another provider's credentials.
 export function testPaymentConfig(
@@ -77,7 +98,7 @@ const eventSchema = z.object({
 
 export function validateTestCreditEvent(
   raw: unknown,
-  config: TestPaymentConfig
+  config: TestCreditEventConfig
 ) {
   const event = eventSchema.parse(raw);
   const metadata = event.data.orderMetadata;

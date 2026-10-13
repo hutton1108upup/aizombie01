@@ -401,6 +401,8 @@ File: `specs/aizombie-payments.spec.ts`.
 - The authenticated test UI sends only the selected pack and a stable request UUID.
   A failed checkout can be retried with the same request, without displaying a
   paid balance. Browser provider responses are stubbed for this journey.
+- Successful checkout navigates to the vendor's current `/store/{slug}/checkout/cs_*`
+  URL; the destination is stubbed so this browser regression test never calls Waffo.
 - Unit SQLite tests cover exact price/store/environment/user matching, duplicate
   completion, unmatched checkout rejection and refunds before/after completion.
 

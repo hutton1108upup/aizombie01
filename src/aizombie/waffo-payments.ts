@@ -2,10 +2,14 @@ import { WaffoPancake, verifyWebhook } from '@waffo/pancake-ts';
 import { creditPacks } from '@/aizombie/contracts';
 import {
   type CreditPackId,
+  type TestCreditEventConfig,
   type TestPaymentConfig,
+  safeWaffoCheckoutUrl,
   validateTestCreditEvent,
 } from '@/aizombie/waffo-contracts';
 import { InvalidWebhookSignatureError } from '@/payment/errors';
+
+export { safeWaffoCheckoutUrl } from '@/aizombie/waffo-contracts';
 
 type CheckoutRow = {
   id: string;
@@ -20,20 +24,6 @@ type CheckoutRow = {
   session_url: string | null;
   session_expires_at: number | null;
 };
-
-export function safeWaffoCheckoutUrl(value: string) {
-  const url = new URL(value);
-  if (
-    url.protocol !== 'https:' ||
-    url.hostname !== 'pancake.waffo.ai' ||
-    url.username ||
-    url.password ||
-    !url.pathname.startsWith('/consumer/')
-  ) {
-    throw new Error('Unexpected Waffo checkout destination.');
-  }
-  return value;
-}
 
 export async function createTestCreditCheckout(
   db: Pick<D1Database, 'prepare'>,
@@ -124,7 +114,7 @@ export async function createTestCreditCheckout(
 // Only call after signature verification. The local checkout owns all entitlements.
 export async function applyTestCreditEvent(
   db: Pick<D1Database, 'prepare'>,
-  config: TestPaymentConfig,
+  config: TestCreditEventConfig,
   raw: unknown
 ) {
   const { event, pack, metadata } = validateTestCreditEvent(raw, config);
@@ -157,7 +147,7 @@ export async function applyTestCreditEvent(
 
 export async function handleTestCreditWebhook(
   db: Pick<D1Database, 'prepare'>,
-  config: TestPaymentConfig,
+  config: TestCreditEventConfig,
   payload: string,
   signature: string
 ) {

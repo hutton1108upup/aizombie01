@@ -2,7 +2,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { creditPacks } from '@/aizombie/contracts';
-import type { CreditPackId } from '@/aizombie/waffo-contracts';
+import {
+  type CreditPackId,
+  safeWaffoCheckoutUrl,
+} from '@/aizombie/waffo-contracts';
 import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/dashboard/payments')({
@@ -71,14 +74,7 @@ function TestPayments() {
       const result = z
         .object({ mode: z.literal('test'), url: z.url() })
         .parse(await response.json());
-      const url = new URL(result.url);
-      if (
-        url.protocol !== 'https:' ||
-        url.hostname !== 'pancake.waffo.ai' ||
-        !url.pathname.startsWith('/consumer/')
-      )
-        throw new Error('Unexpected checkout destination.');
-      window.location.assign(result.url);
+      window.location.assign(safeWaffoCheckoutUrl(result.url));
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : 'Checkout failed.');
     } finally {

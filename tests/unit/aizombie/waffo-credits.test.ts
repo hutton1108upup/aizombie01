@@ -205,7 +205,7 @@ describe('AI Zombie Test payments', () => {
             expect(params.metadata.userId).toBe('user-one');
             return {
               checkoutUrl:
-                'https://pancake.waffo.ai/consumer/checkout/test#token=fake',
+                'https://pancake.waffo.ai/store/ai-zombie-video/checkout/cs_test#token=fake',
             };
           },
         },
@@ -239,11 +239,16 @@ describe('AI Zombie Test payments', () => {
   });
   test('only Waffo HTTPS checkout redirects are allowed', () => {
     expect(
-      safeWaffoCheckoutUrl('https://pancake.waffo.ai/consumer/checkout/x')
-    ).toContain('/consumer/');
+      safeWaffoCheckoutUrl(
+        'https://pancake.waffo.ai/store/ai-zombie-video/checkout/cs_test'
+      )
+    ).toContain('/checkout/');
     for (const url of [
       'http://pancake.waffo.ai/consumer/x',
       'https://evil.test/consumer/x',
+      'https://pancake.waffo.ai/consumer/checkout/x',
+      'https://pancake.waffo.ai/store/ai-zombie-video/settings',
+      'https://pancake.waffo.ai:8443/store/ai-zombie-video/checkout/cs_test',
       'https://pancake.waffo.ai/merchant/x',
     ])
       expect(() => safeWaffoCheckoutUrl(url)).toThrow();

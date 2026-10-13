@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aizombie-waffo-test",
+  "account_id": "7fd7ed1128ca3d125feaa279f4d4c547",
+  "main": "src/aizombie/waffo-test-receiver.ts",
+  "compatibility_date": "2025-09-02",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "routes": [],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "aizombie-waffo-test",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ]
+}
