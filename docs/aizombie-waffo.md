@@ -50,7 +50,10 @@ default. No key was uploaded to Cloudflare or committed to GitHub.
 
 All three real SDK Test checkout calls succeeded and repeated requests reused
 the saved session. The Single hosted page visibly showed Test mode, AI Zombie
-Video and USD 6.90. No purchase was completed. The actual vendor URL format is
+Video and USD 6.90. The initial URL-only check did not complete a purchase; the
+later dedicated receiver verification below completed and refunded an official
+Test payment.
+The actual vendor URL format is
 `https://pancake.waffo.ai/store/{slug}/checkout/cs_*`; client and server now share
 one check restricting HTTPS, exact host, normal port and checkout path.
 
@@ -73,37 +76,64 @@ one check restricting HTTPS, exact host, normal port and checkout path.
    preview deliberately returns 503 for all payment requests.
 6. Complete a real Waffo Test purchase, prove its signed callback changes one
    order to paid, replay it, and test a refund. Provider-delivered end-to-end
-   verification remains pending the Test receiver deployment.
+   verification is recorded below for the deployed dedicated Test receiver.
 
-## Prepared receiver deployment, awaiting account/resource confirmation
+## Deployed dedicated Test receiver and provider evidence (2026-10-13)
 
-- Confirmed target account: Cloudflare `Duckweed1014@gmail.com's Account`,
-  ID `7fd7ed1128ca3d125feaa279f4d4c547`.
-- Proposed new Worker: `aizombie-waffo-test`.
-- Proposed new D1 database: `aizombie-waffo-test`.
-- Config: `wrangler.waffo-test.jsonc`; the database ID is deliberately a
-  placeholder until the named Test database is created and verified.
-- Callback: `https://aizombie-waffo-test.duckweed1014.workers.dev/api/aizombie/payments/webhook`.
-  This proposed URL is not deployed or registered yet.
-- Entry: `src/aizombie/waffo-test-receiver.ts`, already bundled by a local
-  Wrangler dry run. Only `/health` and the signed Test callback are exposed.
-  No login, e2e helper, checkout creation or public balance/history endpoints.
-- This receiver requires **no merchant private key or app login secret**.
-  It uses the vendor SDK's public Test signature key. Store/product IDs are
-  pinned to this project. Non-Test or unmatched events cannot credit an order.
-- Ignored `outputs/private/waffo-test-receiver-seed.sql` prepares a minimal
-  synthetic user table and the three server-created pending Test orders.
-  It contains no session URL, private key or real customer contact data.
-- Deployment does not alter the `aizombie01` Worker or root domain. After
-  confirmation, create the resources, replace the placeholder, initialize only
-  this Test database, deploy, register this store's Test webhook, and prove a
-  Test completion and refund in D1. Do not expose the local e2e harness.
+- Confirmed Cloudflare account: `Duckweed1014@gmail.com`, account ID
+  `7fd7ed1128ca3d125feaa279f4d4c547`.
+- Worker and isolated D1: `aizombie-waffo-test`.
+- D1 ID: `758e1a77-3f37-4c59-863e-f7343bbfd8ec`, bound by
+  `wrangler.waffo-test.jsonc`. Its schema contains only synthetic Test users,
+  the checkout table, its index and permanent-refund guard trigger.
+- Initial deployed version: `2050d988-aaa5-4e0b-a8b1-f5bc262429da`.
+- Health: `https://aizombie-waffo-test.duckweed1014.workers.dev/health`.
+- Registered callback:
+  `https://aizombie-waffo-test.duckweed1014.workers.dev/api/aizombie/payments/webhook`.
+- Waffo Test webhook ID: `0c6a41a3-fab5-4aa9-8712-b6b243d11320`, subscribed
+  to `order.completed`, `refund.succeeded` and `refund.failed` for this store.
+  The store has no Production webhook.
+- Entry: `src/aizombie/waffo-test-receiver.ts`. Only health and the signed Test
+  callback are exposed. No login, e2e helper, checkout creation or public
+  balance/history endpoint; no merchant private key or app login secret.
+- New project-only Merchant Test private key is retained in ignored local files.
+  It was used to create server-bound checkout sessions, never uploaded to this
+  receiver, committed, or reused from another project.
+
+Actual provider workflow used Waffo's official Test cashier and its Visa success
+fixture. No real charge occurred. One server-created pending Single checkout
+was seeded into isolated D1 before payment; paid/refunded status was changed
+only by real signed provider callbacks, never by a manual SQL status update.
+
+| Provider action | Verified isolated D1 result |
+| --- | --- |
+| Before payment | pending, 0 active Test credits |
+| Test USD 6.90 payment and actual `order.completed` | paid, 100 active Test credits |
+| Re-send the same completion in Waffo | 1 order, still 100 active Test credits |
+| Official Test full refund and actual `refund.succeeded` | refunded, 0 active Test credits |
+| Re-send the old completion after refund | refunded, still 0 active Test credits |
+
+Reference checkout: `2600178d-f837-4b3d-b7da-4777e1c5bba8`.
+Provider order: `ORD_4V9BQH0RruqprKl3eusoub`; payment:
+`PAY_4IkuX2jPIsjT592YNvOesL`; refund: `REF_1psrVkWtaYkPNyrB6HoiRc`.
+Normal HTTPS health returned 200; missing and forged callback signatures returned
+400. Local screenshots/logs under ignored `outputs/` retain deployment, hosted
+Test success, duplicate, and refund evidence. Token-bearing checkout URLs and
+private keys stay in ignored `outputs/private/` and must not be shared.
+
+Cloudflare Builds is linked to this same GitHub repository's `main`, with
+`pnpm exec wrangler deploy --dry-run --config wrangler.waffo-test.jsonc` as build
+and `pnpm exec wrangler deploy --config wrangler.waffo-test.jsonc` as deploy.
+It uses the existing, already authorized AI Zombie build token. The root domain
+remains a public preview with commerce and generation disabled.
 
 ## Verification and launch boundaries
 
 Unit tests use SQLite and the installed SDK; checkout responses in unit/browser
 tests are stubbed. They prove local validation, durable deduplication and
-refund ordering, not Waffo's hosted payment completion.
+refund ordering. The separate live Test workflow above proves provider payment,
+signed delivery, duplicate handling and refund revocation for one Single order.
+It does not prove production charges, real authentication or video fulfillment.
 
 Public preview deployments remain payment-disabled and require no key or D1.
 `pnpm deploy` remains blocked until real video generation, private uploads,
