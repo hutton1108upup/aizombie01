@@ -45,6 +45,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-passw
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardPaymentsRouteImport } from './routes/dashboard/payments'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsApikeysRouteImport } from './routes/settings/apikeys'
 import { Route as SettingsBillingRouteImport } from './routes/settings/billing'
@@ -54,6 +55,7 @@ import { Route as SettingsPaymentRouteImport } from './routes/settings/payment'
 import { Route as SettingsProfileRouteImport } from './routes/settings/profile'
 import { Route as SettingsSecurityRouteImport } from './routes/settings/security'
 import { Route as ApiAizombieJobsRouteImport } from './routes/api/aizombie/jobs'
+import { Route as ApiAizombiePaymentsRouteImport } from './routes/api/aizombie/payments'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiE2eUsersRouteImport } from './routes/api/e2e/users'
 import { Route as ApiE2eVideoJobsRouteImport } from './routes/api/e2e/video-jobs'
@@ -62,6 +64,7 @@ import { Route as ApiWebhooksCreemRouteImport } from './routes/api/webhooks/cree
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 import { Route as ApiWebhooksWaffoRouteImport } from './routes/api/webhooks/waffo'
 import { Route as ApiAizombieJobsIdRouteImport } from './routes/api/aizombie/jobs/$id'
+import { Route as ApiAizombiePaymentsWebhookRouteImport } from './routes/api/aizombie/payments/webhook'
 import { Route as ApiAuthExtensionGoogleRouteImport } from './routes/api/auth/extension/google'
 import { Route as ApiAizombieJobsIdVideoRouteImport } from './routes/api/aizombie/jobs/$id/video'
 
@@ -246,6 +249,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardPaymentsRoute = DashboardPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -291,6 +299,11 @@ const ApiAizombieJobsRoute = ApiAizombieJobsRouteImport.update({
   path: '/api/aizombie/jobs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAizombiePaymentsRoute = ApiAizombiePaymentsRouteImport.update({
+  id: '/api/aizombie/payments',
+  path: '/api/aizombie/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -331,6 +344,12 @@ const ApiAizombieJobsIdRoute = ApiAizombieJobsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiAizombieJobsRoute,
 } as any)
+const ApiAizombiePaymentsWebhookRoute =
+  ApiAizombiePaymentsWebhookRouteImport.update({
+    id: '/webhook',
+    path: '/webhook',
+    getParentRoute: () => ApiAizombiePaymentsRoute,
+  } as any)
 const ApiAuthExtensionGoogleRoute = ApiAuthExtensionGoogleRouteImport.update({
   id: '/api/auth/extension/google',
   path: '/api/auth/extension/google',
@@ -376,6 +395,7 @@ export interface FileRoutesByFullPath {
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboard/payments': typeof DashboardPaymentsRoute
   '/settings/apikeys': typeof SettingsApikeysRoute
   '/settings/billing': typeof SettingsBillingRoute
   '/settings/files': typeof SettingsFilesRoute
@@ -388,6 +408,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/api/aizombie/jobs': typeof ApiAizombieJobsRouteWithChildren
+  '/api/aizombie/payments': typeof ApiAizombiePaymentsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/e2e/users': typeof ApiE2eUsersRoute
   '/api/e2e/video-jobs': typeof ApiE2eVideoJobsRoute
@@ -396,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
   '/api/aizombie/jobs/$id': typeof ApiAizombieJobsIdRouteWithChildren
+  '/api/aizombie/payments/webhook': typeof ApiAizombiePaymentsWebhookRoute
   '/api/auth/extension/google': typeof ApiAuthExtensionGoogleRoute
   '/api/aizombie/jobs/$id/video': typeof ApiAizombieJobsIdVideoRoute
 }
@@ -430,6 +452,7 @@ export interface FileRoutesByTo {
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboard/payments': typeof DashboardPaymentsRoute
   '/settings/apikeys': typeof SettingsApikeysRoute
   '/settings/billing': typeof SettingsBillingRoute
   '/settings/files': typeof SettingsFilesRoute
@@ -442,6 +465,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/api/aizombie/jobs': typeof ApiAizombieJobsRouteWithChildren
+  '/api/aizombie/payments': typeof ApiAizombiePaymentsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/e2e/users': typeof ApiE2eUsersRoute
   '/api/e2e/video-jobs': typeof ApiE2eVideoJobsRoute
@@ -450,6 +474,7 @@ export interface FileRoutesByTo {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
   '/api/aizombie/jobs/$id': typeof ApiAizombieJobsIdRouteWithChildren
+  '/api/aizombie/payments/webhook': typeof ApiAizombiePaymentsWebhookRoute
   '/api/auth/extension/google': typeof ApiAuthExtensionGoogleRoute
   '/api/aizombie/jobs/$id/video': typeof ApiAizombieJobsIdVideoRoute
 }
@@ -488,6 +513,7 @@ export interface FileRoutesById {
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/dashboard/payments': typeof DashboardPaymentsRoute
   '/settings/apikeys': typeof SettingsApikeysRoute
   '/settings/billing': typeof SettingsBillingRoute
   '/settings/files': typeof SettingsFilesRoute
@@ -500,6 +526,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/api/aizombie/jobs': typeof ApiAizombieJobsRouteWithChildren
+  '/api/aizombie/payments': typeof ApiAizombiePaymentsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/e2e/users': typeof ApiE2eUsersRoute
   '/api/e2e/video-jobs': typeof ApiE2eVideoJobsRoute
@@ -508,6 +535,7 @@ export interface FileRoutesById {
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
   '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
   '/api/aizombie/jobs/$id': typeof ApiAizombieJobsIdRouteWithChildren
+  '/api/aizombie/payments/webhook': typeof ApiAizombiePaymentsWebhookRoute
   '/api/auth/extension/google': typeof ApiAuthExtensionGoogleRoute
   '/api/aizombie/jobs/$id/video': typeof ApiAizombieJobsIdVideoRoute
 }
@@ -547,6 +575,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/auth/reset-password'
     | '/blog/$slug'
+    | '/dashboard/payments'
     | '/settings/apikeys'
     | '/settings/billing'
     | '/settings/files'
@@ -559,6 +588,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/settings/'
     | '/api/aizombie/jobs'
+    | '/api/aizombie/payments'
     | '/api/auth/$'
     | '/api/e2e/users'
     | '/api/e2e/video-jobs'
@@ -567,6 +597,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/api/webhooks/waffo'
     | '/api/aizombie/jobs/$id'
+    | '/api/aizombie/payments/webhook'
     | '/api/auth/extension/google'
     | '/api/aizombie/jobs/$id/video'
   fileRoutesByTo: FileRoutesByTo
@@ -601,6 +632,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/auth/reset-password'
     | '/blog/$slug'
+    | '/dashboard/payments'
     | '/settings/apikeys'
     | '/settings/billing'
     | '/settings/files'
@@ -613,6 +645,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/settings'
     | '/api/aizombie/jobs'
+    | '/api/aizombie/payments'
     | '/api/auth/$'
     | '/api/e2e/users'
     | '/api/e2e/video-jobs'
@@ -621,6 +654,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/api/webhooks/waffo'
     | '/api/aizombie/jobs/$id'
+    | '/api/aizombie/payments/webhook'
     | '/api/auth/extension/google'
     | '/api/aizombie/jobs/$id/video'
   id:
@@ -658,6 +692,7 @@ export interface FileRouteTypes {
     | '/auth/register'
     | '/auth/reset-password'
     | '/blog/$slug'
+    | '/dashboard/payments'
     | '/settings/apikeys'
     | '/settings/billing'
     | '/settings/files'
@@ -670,6 +705,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/settings/'
     | '/api/aizombie/jobs'
+    | '/api/aizombie/payments'
     | '/api/auth/$'
     | '/api/e2e/users'
     | '/api/e2e/video-jobs'
@@ -678,6 +714,7 @@ export interface FileRouteTypes {
     | '/api/webhooks/stripe'
     | '/api/webhooks/waffo'
     | '/api/aizombie/jobs/$id'
+    | '/api/aizombie/payments/webhook'
     | '/api/auth/extension/google'
     | '/api/aizombie/jobs/$id/video'
   fileRoutesById: FileRoutesById
@@ -712,6 +749,7 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   ApiAizombieJobsRoute: typeof ApiAizombieJobsRouteWithChildren
+  ApiAizombiePaymentsRoute: typeof ApiAizombiePaymentsRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiE2eUsersRoute: typeof ApiE2eUsersRoute
   ApiE2eVideoJobsRoute: typeof ApiE2eVideoJobsRoute
@@ -976,6 +1014,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/payments': {
+      id: '/dashboard/payments'
+      path: '/payments'
+      fullPath: '/dashboard/payments'
+      preLoaderRoute: typeof DashboardPaymentsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/settings/': {
       id: '/settings/'
       path: '/'
@@ -1039,6 +1084,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAizombieJobsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/aizombie/payments': {
+      id: '/api/aizombie/payments'
+      path: '/api/aizombie/payments'
+      fullPath: '/api/aizombie/payments'
+      preLoaderRoute: typeof ApiAizombiePaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -1095,6 +1147,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAizombieJobsIdRouteImport
       parentRoute: typeof ApiAizombieJobsRoute
     }
+    '/api/aizombie/payments/webhook': {
+      id: '/api/aizombie/payments/webhook'
+      path: '/webhook'
+      fullPath: '/api/aizombie/payments/webhook'
+      preLoaderRoute: typeof ApiAizombiePaymentsWebhookRouteImport
+      parentRoute: typeof ApiAizombiePaymentsRoute
+    }
     '/api/auth/extension/google': {
       id: '/api/auth/extension/google'
       path: '/api/auth/extension/google'
@@ -1143,10 +1202,12 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface DashboardRouteChildren {
+  DashboardPaymentsRoute: typeof DashboardPaymentsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardPaymentsRoute: DashboardPaymentsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
@@ -1203,6 +1264,17 @@ const ApiAizombieJobsRouteWithChildren = ApiAizombieJobsRoute._addFileChildren(
   ApiAizombieJobsRouteChildren,
 )
 
+interface ApiAizombiePaymentsRouteChildren {
+  ApiAizombiePaymentsWebhookRoute: typeof ApiAizombiePaymentsWebhookRoute
+}
+
+const ApiAizombiePaymentsRouteChildren: ApiAizombiePaymentsRouteChildren = {
+  ApiAizombiePaymentsWebhookRoute: ApiAizombiePaymentsWebhookRoute,
+}
+
+const ApiAizombiePaymentsRouteWithChildren =
+  ApiAizombiePaymentsRoute._addFileChildren(ApiAizombiePaymentsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
@@ -1233,6 +1305,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   ApiAizombieJobsRoute: ApiAizombieJobsRouteWithChildren,
+  ApiAizombiePaymentsRoute: ApiAizombiePaymentsRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiE2eUsersRoute: ApiE2eUsersRoute,
   ApiE2eVideoJobsRoute: ApiE2eVideoJobsRoute,

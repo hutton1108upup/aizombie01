@@ -43,3 +43,24 @@ export const videoCreditEntries = sqliteTable('video_credit_entries', {
   amount: integer('amount').notNull(),
   createdAt: integer('created_at').notNull(),
 }, (t) => [uniqueIndex('video_credit_job_kind_idx').on(t.grantId, t.jobId, t.kind)]);
+
+// This sandbox table is intentionally unrelated to spendable video grants.
+export const videoTestCheckouts = sqliteTable('aizombie_test_checkouts', {
+  id: text('id').primaryKey(),
+  userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+  requestId: text('request_id').notNull(),
+  packId: text('pack_id').notNull(),
+  productId: text('product_id').notNull(),
+  storeId: text('store_id').notNull(),
+  amount: integer('amount').notNull(),
+  credits: integer('credits').notNull(),
+  status: text('status').notNull().default('pending').$type<'pending' | 'paid' | 'refunded'>(),
+  orderId: text('order_id').unique(),
+  sessionUrl: text('session_url'),
+  sessionExpiresAt: integer('session_expires_at'),
+  createdAt: integer('created_at').notNull(),
+  updatedAt: integer('updated_at').notNull(),
+}, (t) => [
+  uniqueIndex('aizombie_test_checkout_request_idx').on(t.userId, t.requestId),
+  index('aizombie_test_checkouts_user_idx').on(t.userId, t.createdAt),
+]);

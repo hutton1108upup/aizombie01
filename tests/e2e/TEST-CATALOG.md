@@ -392,3 +392,18 @@ The production preview blocks all account, upload, generation, checkout and webh
 ## Production analytics integration
 
 Browser check: `scripts/check-analytics-browser.mjs`, against an isolated built preview Worker. Vendor requests are stubbed, so verification never sends fake traffic to analytics providers. Local host loads no analytics; a simulated production origin loads only the configured IDs; URL query/hash and detailed referrer paths are omitted; Clarity skips initial query URLs; both photo inputs are inside its masked form. An initial page and one internal route produce exactly two GA4 page_view events and only one configuration. Live provider receipt and GSC ownership/sitemap state require separate dashboard evidence.
+
+## AI Zombie Test credit payments
+
+File: `specs/aizombie-payments.spec.ts`.
+- Anonymous history/checkout is rejected and cross-origin checkout receives 403.
+- In an unconfigured runtime, verified users receive 503 and cannot purchase.
+- The authenticated test UI sends only the selected pack and a stable request UUID.
+  A failed checkout can be retried with the same request, without displaying a
+  paid balance. Browser provider responses are stubbed for this journey.
+- Unit SQLite tests cover exact price/store/environment/user matching, duplicate
+  completion, unmatched checkout rejection and refunds before/after completion.
+
+Real Waffo signed delivery, hosted payment, project Test credentials and a dedicated
+public Test receiver remain separate acceptance gates. Test credits never grant
+video generation or production credits.
